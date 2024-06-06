@@ -5,18 +5,18 @@
 using namespace std;
 
 // Kelas Abstrak
-class Person {
+class Orang {
 protected:
     int id;
     string nama;
     string departemen;
 
 public:
-    Person(int id, const string& nama, const string& departemen)
-        : id(id), nama(name), departemen(department) {}
+    Orang(int id, const string& nama, const string& departemen)
+        : id(id), nama(nama), departemen(departemen) {}
 
     // Method Abstrak
-    virtual void display() const = 0;
+    virtual void tampilkan() const = 0;
 
     int getId() const {
         return id;
@@ -30,140 +30,140 @@ public:
         return departemen;
     }
 
-    void setName(const string& newName) {
-        name = newName;
+    void setNama(const string& namaBaru) {
+        nama = namaBaru;
     }
 
-    void setDepartment(const string& newDepartment) {
-        department = newDepartment;
+    void setDepartemen(const string& departemenBaru) {
+        departemen = departemenBaru;
     }
 };
 
-class Employee : public Person {
+class Karyawan : public Orang {
 private:
-    double salary;
+    double gaji;
 
 public:
-    Employee(int id, const string& name, const string& department, double salary)
-        : Person(id, name, department), salary(salary) {}
+    Karyawan(int id, const string& nama, const string& departemen, double gaji)
+        : Orang(id, nama, departemen), gaji(gaji) {}
 
-    double getSalary() const {
-        return salary;
+    double getGaji() const {
+        return gaji;
     }
 
-    void setSalary(double newSalary) {
-        salary = newSalary;
+    void setGaji(double gajiBaru) {
+        gaji = gajiBaru;
     }
 
     // Overriding
-    void display() const override {
-        cout << "ID: " << id << ", Name: " << name << ", Department: " << department << ", Salary: $" << salary << endl;
+    void tampilkan() const override {
+        cout << "ID: " << id << ", Nama: " << nama << ", Departemen: " << departemen << ", Gaji: Rp" << gaji << endl;
     }
 };
 
-class Company {
+class Perusahaan {
 private:
-    vector<Employee> employees;
-    int nextId;
+    vector<Karyawan> karyawan;
+    int idBerikutnya;
 
 public:
-    Company() : nextId(1) {}
+    Perusahaan() : idBerikutnya(1) {}
 
-    void addEmployee(const string& name, const string& department, double salary) {
-        employees.push_back(Employee(nextId++, name, department, salary));
+    void tambahKaryawan(const string& nama, const string& departemen, double gaji) {
+        karyawan.push_back(Karyawan(idBerikutnya++, nama, departemen, gaji));
     }
 
-    void viewEmployees() const {
-        if (employees.empty()) {
-            cout << "No employees available." << endl;
+    void lihatKaryawan() const {
+        if (karyawan.empty()) {
+            cout << "Tidak ada karyawan." << endl;
             return;
         }
-        for (const auto& employee : employees) {
-            employee.display();
+        for (const auto& k : karyawan) {
+            k.tampilkan();
         }
     }
 
-    void updateEmployee(int id, const string& newName, const string& newDepartment, double newSalary) {
-        for (auto& employee : employees) {
-            if (employee.getId() == id) {
-                employee.setName(newName);
-                employee.setDepartment(newDepartment);
-                employee.setSalary(newSalary);
-                cout << "Employee updated successfully." << endl;
+    void editDataKaryawan(int id, const string& namaBaru, const string& departemenBaru, double gajiBaru) {
+        for (auto& k : karyawan) {
+            if (k.getId() == id) {
+                k.setNama(namaBaru);
+                k.setDepartemen(departemenBaru);
+                k.setGaji(gajiBaru);
+                cout << "Karyawan berhasil diperbarui." << endl;
                 return;
             }
         }
-        cout << "Employee with ID " << id << " not found." << endl;
+        cout << "Karyawan dengan ID " << id << " tidak ditemukan." << endl;
     }
 
-    void deleteEmployee(int id) {
-        for (auto it = employees.begin(); it != employees.end(); ++it) {
+    void hapusKaryawan(int id) {
+        for (auto it = karyawan.begin(); it != karyawan.end(); ++it) {
             if (it->getId() == id) {
-                employees.erase(it);
-                cout << "Employee deleted successfully." << endl;
+                karyawan.erase(it);
+                cout << "Karyawan berhasil dihapus." << endl;
                 return;
             }
         }
-        cout << "Employee with ID " << id << " not found." << endl;
+        cout << "Karyawan dengan ID " << id << " tidak ditemukan." << endl;
     }
 };
 
 int main() {
-    Company company;
-    int choice;
-    string name, department;
-    double salary;
+    Perusahaan perusahaan;
+    int pilihan;
+    string nama, departemen;
+    double gaji;
     int id;
 
     do {
-        cout << "\nEmployee Management System\n";
-        cout << "1. Add Employee\n";
-        cout << "2. View Employees\n";
-        cout << "3. Update Employee\n";
-        cout << "4. Delete Employee\n";
-        cout << "5. Exit\n";
-        cout << "Input your Choice: ";
-        cin >> choice;
+        cout << "\nSistem Manajemen Karyawan\n";
+        cout << "1. Tambah Karyawan\n";
+        cout << "2. Lihat Karyawan\n";
+        cout << "3. Edit Data Karyawan\n";
+        cout << "4. Hapus Karyawan\n";
+        cout << "5. Keluar\n";
+        cout << "Masukkan pilihan Anda: ";
+        cin >> pilihan;
 
-        switch (choice) {
+        switch (pilihan) {
             case 1:
-                cout << "Input employee name: ";
+                cout << "Masukkan nama karyawan: ";
                 cin.ignore();
-                getline(cin, name);
-                cout << "Input employee department: ";
-                getline(cin, department);
-                cout << "Input employee salary: ";
-                cin >> salary;
-                company.addEmployee(name, department, salary);
-                cout << "Pekerja berhasil ditambahkan." << endl;
+                getline(cin, nama);
+                cout << "Masukkan departemen karyawan: ";
+                getline(cin, departemen);
+                cout << "Masukkan gaji karyawan: ";
+                cin >> gaji;
+                perusahaan.tambahKaryawan(nama, departemen, gaji);
+                cout << "Karyawan berhasil ditambahkan." << endl;
                 break;
             case 2:
-                company.viewEmployees();
+                perusahaan.lihatKaryawan();
                 break;
             case 3:
-                cout << "Input employee ID to update: ";
+                cout << "Masukkan ID karyawan yang akan diperbarui: ";
                 cin >> id;
-                cout << "Input new employee name: ";
+                cout << "Masukkan nama baru karyawan: ";
                 cin.ignore();
-                getline(cin, name);
-                cout << "Input new employee department: ";
-                getline(cin, department);
-                cout << "Input new employee salary: ";
-                cin >> salary;
-                company.updateEmployee(id, name, department, salary);
+                getline(cin, nama);
+                cout << "Masukkan departemen baru karyawan: ";
+                getline(cin, departemen);
+                cout << "Masukkan gaji baru karyawan: ";
+                cin >> gaji;
+                perusahaan.editDataKaryawan(id, nama, departemen, gaji);
                 break;
             case 4:
-                cout << "Input employee ID to delete: ";
+                cout << "Masukkan ID karyawan yang akan dihapus: ";
                 cin >> id;
-                company.deleteEmployee(id);
+                perusahaan.hapusKaryawan(id);
                 break;
             case 5:
-                cout << "Exit Succesfully" << endl;
+                cout << "Keluar..." << endl;
                 break;
             default:
-                cout << "Invalid choice. Please try again." << endl;
+                cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
-    } while (choice != 5);
+    } while (pilihan != 5);
 
     return 0;
 }
