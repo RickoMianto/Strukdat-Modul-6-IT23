@@ -16,7 +16,7 @@ public:
         : id(id), nama(nama), departemen(departemen) {}
 
     // Method Abstrak
-    virtual void tampilkan() const = 0;
+    virtual void display() const = 0;
 
     int getId() const {
         return id;
@@ -56,7 +56,7 @@ public:
     }
 
     // Overriding
-    void tampilkan() const override {
+    void display() const override {
         cout << "ID: " << id << ", Nama: " << nama << ", Departemen: " << departemen << ", Gaji: Rp" << gaji << endl;
     }
 };
@@ -73,13 +73,13 @@ public:
         karyawan.push_back(Karyawan(idBerikutnya++, nama, departemen, gaji));
     }
 
-    void lihatKaryawan() const {
+    void displayKaryawan() const {
         if (karyawan.empty()) {
             cout << "Tidak ada karyawan." << endl;
             return;
         }
         for (const auto& k : karyawan) {
-            k.tampilkan();
+            k.display();
         }
     }
 
@@ -89,7 +89,7 @@ public:
                 k.setNama(namaBaru);
                 k.setDepartemen(departemenBaru);
                 k.setGaji(gajiBaru);
-                cout << "Karyawan berhasil diperbarui." << endl;
+                cout << "Data karyawan berhasil diperbarui." << endl;
                 return;
             }
         }
@@ -118,47 +118,47 @@ int main() {
     do {
         cout << "\nSistem Manajemen Karyawan\n";
         cout << "1. Tambah Karyawan\n";
-        cout << "2. Lihat Karyawan\n";
+        cout << "2. Display Karyawan\n";
         cout << "3. Edit Data Karyawan\n";
         cout << "4. Hapus Karyawan\n";
         cout << "5. Keluar\n";
-        cout << "Masukkan pilihan Anda: ";
+        cout << "Input pilihan Anda: ";
         cin >> pilihan;
 
         switch (pilihan) {
             case 1:
-                cout << "Masukkan nama karyawan: ";
+                cout << "Input nama karyawan: ";
                 cin.ignore();
                 getline(cin, nama);
-                cout << "Masukkan departemen karyawan: ";
+                cout << "Input departemen karyawan: ";
                 getline(cin, departemen);
-                cout << "Masukkan gaji karyawan: ";
+                cout << "Input gaji karyawan: ";
                 cin >> gaji;
                 perusahaan.tambahKaryawan(nama, departemen, gaji);
                 cout << "Karyawan berhasil ditambahkan." << endl;
                 break;
             case 2:
-                perusahaan.lihatKaryawan();
+                perusahaan.displayKaryawan();
                 break;
             case 3:
-                cout << "Masukkan ID karyawan yang akan diperbarui: ";
+                cout << "Input ID karyawan yang akan di update: ";
                 cin >> id;
-                cout << "Masukkan nama baru karyawan: ";
+                cout << "Input nama baru karyawan: ";
                 cin.ignore();
                 getline(cin, nama);
-                cout << "Masukkan departemen baru karyawan: ";
+                cout << "Input departemen baru karyawan: ";
                 getline(cin, departemen);
-                cout << "Masukkan gaji baru karyawan: ";
+                cout << "Input gaji baru karyawan: ";
                 cin >> gaji;
                 perusahaan.editDataKaryawan(id, nama, departemen, gaji);
                 break;
             case 4:
-                cout << "Masukkan ID karyawan yang akan dihapus: ";
+                cout << "Input ID karyawan yang akan dihapus: ";
                 cin >> id;
                 perusahaan.hapusKaryawan(id);
                 break;
             case 5:
-                cout << "Keluar..." << endl;
+                cout << "Berhasil keluar dari program" << endl;
                 break;
             default:
                 cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
