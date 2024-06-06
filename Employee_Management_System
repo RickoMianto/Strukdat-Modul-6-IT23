@@ -1,0 +1,169 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Kelas Abstrak
+class Person {
+protected:
+    int id;
+    string nama;
+    string departemen;
+
+public:
+    Person(int id, const string& nama, const string& departemen)
+        : id(id), nama(name), departemen(department) {}
+
+    // Method Abstrak
+    virtual void display() const = 0;
+
+    int getId() const {
+        return id;
+    }
+
+    string getNama() const {
+        return nama;
+    }
+
+    string getDepartemen() const {
+        return departemen;
+    }
+
+    void setName(const string& newName) {
+        name = newName;
+    }
+
+    void setDepartment(const string& newDepartment) {
+        department = newDepartment;
+    }
+};
+
+class Employee : public Person {
+private:
+    double salary;
+
+public:
+    Employee(int id, const string& name, const string& department, double salary)
+        : Person(id, name, department), salary(salary) {}
+
+    double getSalary() const {
+        return salary;
+    }
+
+    void setSalary(double newSalary) {
+        salary = newSalary;
+    }
+
+    // Overriding
+    void display() const override {
+        cout << "ID: " << id << ", Name: " << name << ", Department: " << department << ", Salary: $" << salary << endl;
+    }
+};
+
+class Company {
+private:
+    vector<Employee> employees;
+    int nextId;
+
+public:
+    Company() : nextId(1) {}
+
+    void addEmployee(const string& name, const string& department, double salary) {
+        employees.push_back(Employee(nextId++, name, department, salary));
+    }
+
+    void viewEmployees() const {
+        if (employees.empty()) {
+            cout << "No employees available." << endl;
+            return;
+        }
+        for (const auto& employee : employees) {
+            employee.display();
+        }
+    }
+
+    void updateEmployee(int id, const string& newName, const string& newDepartment, double newSalary) {
+        for (auto& employee : employees) {
+            if (employee.getId() == id) {
+                employee.setName(newName);
+                employee.setDepartment(newDepartment);
+                employee.setSalary(newSalary);
+                cout << "Employee updated successfully." << endl;
+                return;
+            }
+        }
+        cout << "Employee with ID " << id << " not found." << endl;
+    }
+
+    void deleteEmployee(int id) {
+        for (auto it = employees.begin(); it != employees.end(); ++it) {
+            if (it->getId() == id) {
+                employees.erase(it);
+                cout << "Employee deleted successfully." << endl;
+                return;
+            }
+        }
+        cout << "Employee with ID " << id << " not found." << endl;
+    }
+};
+
+int main() {
+    Company company;
+    int choice;
+    string name, department;
+    double salary;
+    int id;
+
+    do {
+        cout << "\nEmployee Management System\n";
+        cout << "1. Add Employee\n";
+        cout << "2. View Employees\n";
+        cout << "3. Update Employee\n";
+        cout << "4. Delete Employee\n";
+        cout << "5. Exit\n";
+        cout << "Input your Choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Input employee name: ";
+                cin.ignore();
+                getline(cin, name);
+                cout << "Input employee department: ";
+                getline(cin, department);
+                cout << "Input employee salary: ";
+                cin >> salary;
+                company.addEmployee(name, department, salary);
+                cout << "Pekerja berhasil ditambahkan." << endl;
+                break;
+            case 2:
+                company.viewEmployees();
+                break;
+            case 3:
+                cout << "Input employee ID to update: ";
+                cin >> id;
+                cout << "Input new employee name: ";
+                cin.ignore();
+                getline(cin, name);
+                cout << "Input new employee department: ";
+                getline(cin, department);
+                cout << "Input new employee salary: ";
+                cin >> salary;
+                company.updateEmployee(id, name, department, salary);
+                break;
+            case 4:
+                cout << "Input employee ID to delete: ";
+                cin >> id;
+                company.deleteEmployee(id);
+                break;
+            case 5:
+                cout << "Exit Succesfully" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
