@@ -40,17 +40,17 @@ public:
 
 class Karyawan : public Orang {
 private:
-    double gaji;
+    string gaji;
 
 public:
-    Karyawan(int id, const string& nama, const string& departemen, double gaji)
+    Karyawan(int id, const string& nama, const string& departemen, const string& gaji)
         : Orang(id, nama, departemen), gaji(gaji) {}
 
-    double getGaji() const {
+    string getGaji() const {
         return gaji;
     }
 
-    void setGaji(double gajiBaru) {
+    void setGaji(const string& gajiBaru) {
         gaji = gajiBaru;
     }
 
@@ -64,7 +64,7 @@ private:
     vector<Karyawan> karyawan;
 
 public:
-    void tambahKaryawan(int id, const string& nama, const string& departemen, double gaji) {
+    void tambahKaryawan(int id, const string& nama, const string& departemen, const string& gaji) {
         karyawan.push_back(Karyawan(id, nama, departemen, gaji));
     }
 
@@ -99,14 +99,14 @@ public:
         }
         vector<Karyawan> sortedKaryawan = karyawan;
         sort(sortedKaryawan.begin(), sortedKaryawan.end(), [](const Karyawan& a, const Karyawan& b) {
-            return a.getGaji() < b.getGaji();
+            return stod(a.getGaji()) < stod(b.getGaji());
         });
         for (const auto& k : sortedKaryawan) {
             k.display();
         }
     }
 
-    void editDataKaryawan(int id, const string& namaBaru, const string& departemenBaru, double gajiBaru) {
+    void editDataKaryawan(int id, const string& namaBaru, const string& departemenBaru, const string& gajiBaru) {
         for (auto& k : karyawan) {
             if (k.getId() == id) {
                 k.setNama(namaBaru);
@@ -134,8 +134,7 @@ public:
 int main() {
     Perusahaan perusahaan;
     int pilihan;
-    string nama, departemen;
-    double gaji;
+    string nama, departemen, gaji;
     int id;
 
     do {
@@ -158,7 +157,7 @@ int main() {
                 cout << "Input departemen karyawan: ";
                 getline(cin, departemen);
                 cout << "Input gaji karyawan: ";
-                cin >> gaji;
+                getline(cin, gaji);
                 perusahaan.tambahKaryawan(id, nama, departemen, gaji);
                 cout << "Karyawan berhasil ditambahkan." << endl;
                 break;
@@ -166,26 +165,30 @@ int main() {
                 int subpilihan;
                 do {
                     cout << "\nDisplay Karyawan Berdasarkan :\n";
-                    cout << "1. ID\n";
-                    cout << "2. Gaji\n";
-                    cout << "3. Keluar\n";
+                    cout << "1. Tanpa Sorting\n";
+                    cout << "2. ID\n";
+                    cout << "3. Gaji\n";
+                    cout << "4. Keluar\n";
                     cout << "Input pilihan Anda: ";
                     cin >> subpilihan;
 
                     switch (subpilihan) {
                         case 1:
-                            perusahaan.displayById();
+                            perusahaan.displayKaryawan();
                             break;
                         case 2:
-                            perusahaan.displayByGaji();
+                            perusahaan.displayById();
                             break;
                         case 3:
+                            perusahaan.displayByGaji();
+                            break;
+                        case 4:
                             cout << "Kembali ke Menu utama" << endl;
                             break;
                         default:
                             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
                     }
-                } while (subpilihan != 3);
+                } while (subpilihan != 4);
                 break;
             case 3:
                 cout << "Input ID karyawan yang akan di update: ";
@@ -196,7 +199,7 @@ int main() {
                 cout << "Input departemen baru karyawan: ";
                 getline(cin, departemen);
                 cout << "Input gaji baru karyawan: ";
-                cin >> gaji;
+                getline(cin, gaji);
                 perusahaan.editDataKaryawan(id, nama, departemen, gaji);
                 break;
             case 4:
@@ -211,6 +214,5 @@ int main() {
                 cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
     } while (pilihan != 5);
-
     return 0;
 }
