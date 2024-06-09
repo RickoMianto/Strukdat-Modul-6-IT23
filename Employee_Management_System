@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
-// Kelas Abstrak
 class Orang {
 protected:
     int id;
@@ -15,7 +15,6 @@ public:
     Orang(int id, const string& nama, const string& departemen)
         : id(id), nama(nama), departemen(departemen) {}
 
-    // Method Abstrak
     virtual void display() const = 0;
 
     int getId() const {
@@ -55,7 +54,6 @@ public:
         gaji = gajiBaru;
     }
 
-    // Overriding
     void display() const override {
         cout << "ID: " << id << ", Nama: " << nama << ", Departemen: " << departemen << ", Gaji: Rp" << gaji << endl;
     }
@@ -64,13 +62,10 @@ public:
 class Perusahaan {
 private:
     vector<Karyawan> karyawan;
-    int idBerikutnya;
 
 public:
-    Perusahaan() : idBerikutnya(1) {}
-
-    void tambahKaryawan(const string& nama, const string& departemen, double gaji) {
-        karyawan.push_back(Karyawan(idBerikutnya++, nama, departemen, gaji));
+    void tambahKaryawan(int id, const string& nama, const string& departemen, double gaji) {
+        karyawan.push_back(Karyawan(id, nama, departemen, gaji));
     }
 
     void displayKaryawan() const {
@@ -79,6 +74,34 @@ public:
             return;
         }
         for (const auto& k : karyawan) {
+            k.display();
+        }
+    }
+
+    void displayById() const {
+        if (karyawan.empty()) {
+            cout << "Tidak ada karyawan." << endl;
+            return;
+        }
+        vector<Karyawan> sortedKaryawan = karyawan;
+        sort(sortedKaryawan.begin(), sortedKaryawan.end(), [](const Karyawan& a, const Karyawan& b) {
+            return a.getId() < b.getId();
+        });
+        for (const auto& k : sortedKaryawan) {
+            k.display();
+        }
+    }
+
+    void displayByGaji() const {
+        if (karyawan.empty()) {
+            cout << "Tidak ada karyawan." << endl;
+            return;
+        }
+        vector<Karyawan> sortedKaryawan = karyawan;
+        sort(sortedKaryawan.begin(), sortedKaryawan.end(), [](const Karyawan& a, const Karyawan& b) {
+            return a.getGaji() < b.getGaji();
+        });
+        for (const auto& k : sortedKaryawan) {
             k.display();
         }
     }
@@ -127,6 +150,8 @@ int main() {
 
         switch (pilihan) {
             case 1:
+                cout << "Input ID karyawan: ";
+                cin >> id;
                 cout << "Input nama karyawan: ";
                 cin.ignore();
                 getline(cin, nama);
@@ -134,11 +159,33 @@ int main() {
                 getline(cin, departemen);
                 cout << "Input gaji karyawan: ";
                 cin >> gaji;
-                perusahaan.tambahKaryawan(nama, departemen, gaji);
+                perusahaan.tambahKaryawan(id, nama, departemen, gaji);
                 cout << "Karyawan berhasil ditambahkan." << endl;
                 break;
             case 2:
-                perusahaan.displayKaryawan();
+                int subpilihan;
+                do {
+                    cout << "\nDisplay Karyawan Berdasarkan :\n";
+                    cout << "1. ID\n";
+                    cout << "2. Gaji\n";
+                    cout << "3. Keluar\n";
+                    cout << "Input pilihan Anda: ";
+                    cin >> subpilihan;
+
+                    switch (subpilihan) {
+                        case 1:
+                            perusahaan.displayById();
+                            break;
+                        case 2:
+                            perusahaan.displayByGaji();
+                            break;
+                        case 3:
+                            cout << "Kembali ke Menu utama" << endl;
+                            break;
+                        default:
+                            cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+                    }
+                } while (subpilihan != 3);
                 break;
             case 3:
                 cout << "Input ID karyawan yang akan di update: ";
