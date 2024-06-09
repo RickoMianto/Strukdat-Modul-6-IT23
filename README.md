@@ -1,1 +1,0 @@
-# Strukdat-Modul-6-IT23
